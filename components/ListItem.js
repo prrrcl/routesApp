@@ -1,12 +1,20 @@
 import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { TouchableOpacity, Text, StyleSheet } from 'react-native'
 
 const ListItem = ({name, from, to, onPress}) => {
   return(
-    <View>
-      <Text>Hola</Text>
-    </View>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={onPress}>
+      <Text>{name}</Text>
+      <Text>{from}</Text>
+      <Text>{to}</Text>
+    </TouchableOpacity>
   )
 }
-
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: "#ccc"
+  }
+})
 export default ListItem

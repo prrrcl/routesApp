@@ -1,27 +1,28 @@
-import React, { useState, useEffect } from 'react'
-import axios from 'axios'
-import { View, Text, StyleSheet, FlatList } from 'react-native'
+import React, { useState, useEffect, useCallback } from 'react'
+import useAxios from '../hooks/useAxios'
+import { ScrollView,
+  RefreshControl,
+  StyleSheet,
+  Text,
+  SafeAreaView, FlatList } from 'react-native'
 import ListItem from '../components/ListItem'
+
 
 const ListScreen = ({navigation}) => {
   const [dates] = useState(navigation.state.params.dates)
-  const [data, setData] = useState()
+  const { refreshing, onRefresh, data } = useAxios(`/q?datefrom=${dates.from.getTime()}&dateto=${dates.to.getTime()}`)
   
-  const fetchData = () =>{
-    const ax =  axios.create({baseURL:'https://serverless.prrrcl.now.sh/api/rutas'})
-    return ax.get('/')
-    .then(res => setData(res.data))
-  }
-  useEffect(()=>{
-    fetchData();
-  },[])
-
 return(
-  <View>
-  <Text>
-    List of routes
-  </Text>
+  <SafeAreaView style={styles.container}>
+    <ScrollView
+        contentContainerStyle={styles.scrollView}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
+<Text>List of routes</Text>
   {data ?
+  <>
     <FlatList
     data={data}
     keyExtractor={e => e.id}
@@ -34,13 +35,28 @@ return(
       />
     }
   />
+  {data.length === 0 && <Text>No hay rutas</Text>}
+  </>
   :
   <Text>Loading data...</Text>
   }
   
-  </View>
+  </ScrollView>
+  
+  </SafeAreaView>
 )
 }
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center'
+  },
+  scrollView: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
 
 ListScreen.navigationOptions = ({
   title: "Routes"
