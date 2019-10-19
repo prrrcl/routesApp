@@ -8,7 +8,7 @@ import 'moment/locale/es';
 moment.locale('es')
 
 
-const API_KEY = 'AIzaSyBfMqwblwg9luRIxUU3oRMviWJQRZ3FdVg';
+const API_KEY = '...';
 
 const DetailScreen = ({navigation}) => {
   const [route, setRoute] = useState(navigation.state.params)
