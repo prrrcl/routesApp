@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import { View, Text, StyleSheet, TouchableHighlight } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import DatePicker from 'react-native-datepicker'
-const SearcherScreen = () => {
+const SearcherScreen = ({navigation}) => {
 
   const [dates, setDates] = useState({
     from:'' ,
@@ -9,7 +9,7 @@ const SearcherScreen = () => {
   });
 
   const handleDatePicker = (date, dateSelected) => {
-    date === 'from' ? setDates({...dates, from: dateSelected}) : setDates({...dates, to: dateSelected})
+    date === 'from' ? setDates({...dates, from: new Date(dateSelected)}) : setDates({...dates, to: new Date(dateSelected)})
   }
 
   const styles = StyleSheet.create({
@@ -55,7 +55,7 @@ const SearcherScreen = () => {
       <Text style={styles.label}>To:</Text>
       <DatePicker
         style={{width: 200}}
-        date={dates.from}
+        date={dates.to}
         mode="date"
         placeholder="select date"
         confirmBtnText="Confirm"
@@ -73,9 +73,15 @@ const SearcherScreen = () => {
         }}
         onDateChange={date => handleDatePicker('to',date )} 
         />
-        <TouchableHighlight style={styles.button}>
+        <TouchableOpacity 
+          style={styles.button}
+          onPress={()=> {
+              navigation.navigate('List',{dates} )
+            }
+          }
+          >
           <Text style={styles.buttonText}>Search</Text>
-        </TouchableHighlight>
+        </TouchableOpacity>
     </View>
   )
 }
